@@ -64,22 +64,24 @@ namespace EmployeeDetails_CRUD_Operation
         //Method to Load employees
         private async void GetEmployeeDetails()
         {
-            var resp = await Postclient.GetStringAsync("/public/v2/users/");
-            var employee = JsonConvert.DeserializeObject<List<Employee>>(resp);
 
-
-            HttpResponseMessage respon = Postclient.GetAsync("/public/v2/users/").Result;
-            if(respon.IsSuccessStatusCode)
+            try
             {
-              var respond =  respon.RequestMessage;
-                var reply = respon.Content.Headers;
-                var customerJsonString = await respon.Content.ReadAsStringAsync();
+                var response = await Postclient.GetStringAsync("/public/v2/users/");
+                var employee = JsonConvert.DeserializeObject<List<Employee>>(response);
+
+
+                HttpResponseMessage responsed = Postclient.GetAsync("/public/v2/users/").Result;
+                if (responsed.IsSuccessStatusCode)
+                {
+                    dgrdEmp.ItemsSource = employee;
+                }
             }
-
-            dgrdEmp.ItemsSource = employee;
-
+            catch (Exception ex)
+            {
+                lblMessage.Content = ex.Message.ToString();
+            }
         }
-
 
 
         private async void SaveEmployee(Employee emp)
