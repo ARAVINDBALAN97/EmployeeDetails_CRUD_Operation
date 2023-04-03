@@ -55,6 +55,7 @@
         <TextBox x:Name="txtstaus" HorizontalAlignment="Left" Margin="118,0,0,0" Text="Status" TextWrapping="Wrap" VerticalAlignment="Center" Width="98" Grid.ColumnSpan="2" Height="24" BorderBrush="#FF03050A"/>
         <Button x:Name="btnexport" Content="Export to CSV" Grid.Column="1" HorizontalAlignment="Left" Margin="262,65,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.488,-0.213" Width="93" Click="btnexport_Click" FontWeight="Bold" BorderBrush="#FF150202" Background="#FF2DBB8E" Height="22"/>
         <Button x:Name="btnupdate" Content="Update" HorizontalAlignment="Left" Margin="67,321,0,0" VerticalAlignment="Top" Width="95" Grid.ColumnSpan="2" Height="25" BorderBrush="#FF010C0C" Background="#FF21BFBF" FontWeight="Bold" FontSize="14" Click="btnupdate_Click"/>
+        <Label x:Name="lblMessage" Content="Message" HorizontalAlignment="Left" Margin="79,384,0,0" VerticalAlignment="Top" RenderTransformOrigin="-9.212,0.501" Grid.ColumnSpan="2" Width="108"/>
 
 
 

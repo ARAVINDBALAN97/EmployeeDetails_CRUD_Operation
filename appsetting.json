@@ -9,6 +9,9 @@
   ],
 
   "BaseAddress": {
-    "https://gorest.co.in/"
-  }
+    "https://gorest.co.in/public/v2/users/"
+  },
+  {
+    "accesstoken": "2b3419488e21fb40f8b6bff8598bea38131531c70d9b739131adcda2b76cdcb4"
+  } 
 }

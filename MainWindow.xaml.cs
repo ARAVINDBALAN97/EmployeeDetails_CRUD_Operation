@@ -36,6 +36,9 @@ namespace EmployeeDetails_CRUD_Operation
 
     public partial class MainWindow : Window
     {
+
+        string accesstoken = "2b3419488e21fb40f8b6bff8598bea38131531c70d9b739131adcda2b76cdcb4";
+
         HttpClient Postclient = new HttpClient();
 
         string baseaddress = "https://gorest.co.in/";
@@ -45,6 +48,7 @@ namespace EmployeeDetails_CRUD_Operation
         Postclient.BaseAddress = new Uri(baseaddress);
         Postclient.DefaultRequestHeaders.Accept.Clear();
         Postclient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+        Postclient.DefaultRequestHeaders.Add("Authorization", "Bearer " + accesstoken);
 
 
             InitializeComponent();
@@ -63,37 +67,53 @@ namespace EmployeeDetails_CRUD_Operation
             var resp = await Postclient.GetStringAsync("/public/v2/users/");
             var employee = JsonConvert.DeserializeObject<List<Employee>>(resp);
 
+
+            HttpResponseMessage respon = Postclient.GetAsync("/public/v2/users/").Result;
+            if(respon.IsSuccessStatusCode)
+            {
+              var respond =  respon.RequestMessage;
+                var reply = respon.Content.Headers;
+                var customerJsonString = await respon.Content.ReadAsStringAsync();
+            }
+
             dgrdEmp.ItemsSource = employee;
 
         }
 
-        private void SaveEmployee(Employee Emp)
-        {
-            string json = JsonConvert.SerializeObject(Emp);
-           
-            var http = (HttpWebRequest)WebRequest.Create(new Uri(baseaddress));
 
-            http.Accept = "application/json";
-            http.ContentType = "application/json";
-            http.Method = "POST";
-            string parsedContent = json;
-            ASCIIEncoding encoding = new ASCIIEncoding();
-            Byte[] bytes = encoding.GetBytes(parsedContent);
-            Stream newStream = http.GetRequestStream();
-            newStream.Write(bytes, 0, bytes.Length);
-            newStream.Close();
-            var response = http.GetResponse();
-            var stream = response.GetResponseStream();
-            GetEmployeeDetails();
-        }
-        private async void UpdateEmployee(Employee Emp)
+
+        private async void SaveEmployee(Employee emp)
         {
-            await Postclient.PutAsJsonAsync("/public/v2/users/" + Emp.Id, Emp);
+
+          var response =  await Postclient.PostAsJsonAsync("/public/v2/users/", emp);
         }
 
+       
+        //Delete end point methods
         private async void DelelteEmployee(int EmpID)
         {
-            await Postclient.DeleteAsync("/public/v2/users/" + EmpID);
+
+            string Details;
+
+            Details = EmpID.ToString();
+
+            try
+            {
+                var response = await Postclient.DeleteAsync("/public/v2/users/" + EmpID);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Employee with ID " + Details + " has been deleted.", "Response Window.");
+                    GetEmployeeDetails();
+
+                }
+            }
+
+            catch (Exception ex)
+            {
+                lblMessage.Content = ex.Message.ToString();
+            }
+
         }
 
         //Button Create Employee
@@ -133,10 +153,28 @@ namespace EmployeeDetails_CRUD_Operation
             txtstaus.Text = emp.Status;
         }
 
-        void btnDeleteEmp(object sender, RoutedEventArgs e)
+        private void btnDeleteEmp(object sender, RoutedEventArgs e)
         {
             Employee emp = ((FrameworkElement)sender).DataContext as Employee;
-            this.DelelteEmployee(emp.Id);
+
+
+            try
+            {
+                if (emp.Id.ToString() == null)
+                {
+                    MessageBox.Show("Please Select Emloyee to delete the Request");
+                }
+
+                else
+                {
+                    this.DelelteEmployee(emp.Id);
+                }
+            }
+
+            catch (Exception ex)
+            {
+                lblMessage.Content = ex.Message;
+            }
         }
 
         //Export the value in CSV file
