@@ -37,94 +37,42 @@ namespace EmployeeDetails_CRUD_Operation
     public partial class MainWindow : Window
     {
 
-        string accesstoken = "2b3419488e21fb40f8b6bff8598bea38131531c70d9b739131adcda2b76cdcb4";
+        //Api Service call
+        RestApiService rps = new RestApiService();
 
-        HttpClient Postclient = new HttpClient();
-
-        string baseaddress = "https://gorest.co.in/";
         public MainWindow()
         {
-                   
-        Postclient.BaseAddress = new Uri(baseaddress);
-        Postclient.DefaultRequestHeaders.Accept.Clear();
-        Postclient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        Postclient.DefaultRequestHeaders.Add("Authorization", "Bearer " + accesstoken);
-
 
             InitializeComponent();
+
+            txtEmpId.IsEnabled = false;
         }
 
 
-        //Button Load All the Employees in Grid
-        private void btnLoadEmpDetails_Click(object sender, RoutedEventArgs e)
+        #region Button Load All the Employees in Grid
+        private async void btnLoadEmpDetails_Click(object sender, RoutedEventArgs e)
         {
-            this.GetEmployeeDetails();
-        }
-
-        //Method to Load employees
-        private async void GetEmployeeDetails()
-        {
-
             try
             {
-                var response = await Postclient.GetStringAsync("/public/v2/users/");
-                var employee = JsonConvert.DeserializeObject<List<Employee>>(response);
 
+                dgrdEmp.ItemsSource = await rps.GetEmployeeDetails();
 
-                HttpResponseMessage responsed = Postclient.GetAsync("/public/v2/users/").Result;
-                if (responsed.IsSuccessStatusCode)
-                {
-                    dgrdEmp.ItemsSource = employee;
-                }
             }
             catch (Exception ex)
             {
-                lblMessage.Content = ex.Message.ToString();
+                throw (ex);
             }
         }
 
+        #endregion
 
-        private async void SaveEmployee(Employee emp)
-        {
-
-          var response =  await Postclient.PostAsJsonAsync("/public/v2/users/", emp);
-        }
-
-       
-        //Delete end point methods
-        private async void DelelteEmployee(int EmpID)
-        {
-
-            string Details;
-
-            Details = EmpID.ToString();
-
-            try
-            {
-                var response = await Postclient.DeleteAsync("/public/v2/users/" + EmpID);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    MessageBox.Show("Employee with ID " + Details + " has been deleted.", "Response Window.");
-                    GetEmployeeDetails();
-
-                }
-            }
-
-            catch (Exception ex)
-            {
-                lblMessage.Content = ex.Message.ToString();
-            }
-
-        }
-
-        //Button Create Employee
+        #region Button Create Employee
         private void btnCreate_Click(object sender, RoutedEventArgs e)
         {
             var emp = new Employee()
 
             {
-                Id = Convert.ToInt32(txtEmpId.Text),
+                //Id = Convert.ToInt32(txtEmpId.Text),
                 Name = txtName.Text,
                 Email = txtmail.Text,
                 Gender = txtgender.Text,
@@ -132,10 +80,10 @@ namespace EmployeeDetails_CRUD_Operation
 
             };
 
-                this.SaveEmployee(emp);
+            rps.SaveEmployee(emp);
 
 
-            txtEmpId.Text = "";
+            //txtEmpId.Text = "";
             txtName.Text = "";
             txtmail.Text = "";
             txtgender.Text = "";
@@ -144,7 +92,10 @@ namespace EmployeeDetails_CRUD_Operation
 
         }
 
-        void btnEdit(object sender, RoutedEventArgs e)
+        #endregion
+
+        #region Button Edit details
+        public void btnEdit(object sender, RoutedEventArgs e)
         {
             Employee emp = ((FrameworkElement)sender).DataContext as Employee;
 
@@ -154,45 +105,55 @@ namespace EmployeeDetails_CRUD_Operation
             txtgender.Text = emp.Gender;
             txtstaus.Text = emp.Status;
         }
+        #endregion
 
-        private void btnDeleteEmp(object sender, RoutedEventArgs e)
+
+        #region Button onclick delete
+        public async void btnDeleteEmp(object sender, RoutedEventArgs e)
         {
             Employee emp = ((FrameworkElement)sender).DataContext as Employee;
 
+            string empdetails;
+
+            empdetails = emp.Name;
 
             try
             {
                 if (emp.Id.ToString() == null)
                 {
-                    MessageBox.Show("Please Select Emloyee to delete the Request");
+                    MessageBox.Show("Please Select Emlpoyee to delete the Request");
                 }
 
                 else
                 {
-                    this.DelelteEmployee(emp.Id);
+                    rps.DelelteEmployee(emp.Id);
+                    MessageBox.Show("Employee with ID " + empdetails + " has been deleted.", "Response Window.");
+                    await rps.GetEmployeeDetails();
                 }
             }
 
             catch (Exception ex)
             {
-                lblMessage.Content = ex.Message;
+                MessageBox.Show(ex.Message.ToString());
             }
         }
 
-        //Export the value in CSV file
+        #endregion
+
+        #region Export the employee list to csv
         private void btnexport_Click(object sender, RoutedEventArgs e)
         {
 
-                dgrdEmp.SelectAllCells();
-                dgrdEmp.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
-                ApplicationCommands.Copy.Execute(null, dgrdEmp);
-                dgrdEmp.UnselectAllCells();
-                String result = (string)Clipboard.GetData(DataFormats.CommaSeparatedValue);
-                File.AppendAllText("D:\\EmployeeDetails.csv", result, UnicodeEncoding.UTF8);
-            }
+            dgrdEmp.SelectAllCells();
+            dgrdEmp.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
+            ApplicationCommands.Copy.Execute(null, dgrdEmp);
+            dgrdEmp.UnselectAllCells();
+            String result = (string)Clipboard.GetData(DataFormats.CommaSeparatedValue);
+            File.AppendAllText("D:\\EmployeeDetails.csv", result, UnicodeEncoding.UTF8);
+        }
+        #endregion
 
-
-        //Button Update Employee 
+        #region Buttton onclick Update
         private void btnupdate_Click(object sender, RoutedEventArgs e)
         {
             var emp = new Employee()
@@ -206,7 +167,7 @@ namespace EmployeeDetails_CRUD_Operation
 
             };
 
-            this.UpdateEmployee(emp);
+            rps.UpdateEmployee(emp);
 
 
             txtEmpId.Text = "";
@@ -215,6 +176,8 @@ namespace EmployeeDetails_CRUD_Operation
             txtgender.Text = "";
             txtstaus.Text = "";
         }
+
+        #endregion
     }
 
 
