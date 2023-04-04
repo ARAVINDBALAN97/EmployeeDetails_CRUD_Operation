@@ -14,63 +14,55 @@ namespace EmployeeDetails_CRUD_Operation
     }
 
 
-    class RestServiceApi : IConfigFilesDetails
-    {
-        //private IConfiguration configuration;
+    //class RestServiceApi : IConfigFilesDetails
+    //{
+    //    //private IConfiguration configuration;
 
-        //public RestServiceApi(IConfiguration _configuration)
-        //{
-        //    _configuration = configuration; ;
-        //}
-
-
-        //public RestServiceApi()
-        //{
-
-        //}
+    //    //public RestServiceApi(IConfiguration _configuration)
+    //    //{
+    //    //    _configuration = configuration; ;
+    //    //}
 
 
-       string IConfigFilesDetails.IAccessToken()
-        {
-            //string accesskey;
+    //    //public RestServiceApi()
+    //    //{
 
-            var accesskey = new ConfigurationBuilder().AddJsonFile("appsetting.json").Build().GetSection("appsetting")["accesstoken"];
-
-            //accesskey = configuration.GetSection("ApiKeyDetails").GetSection("accesstoken").Value;
+    //    //}
 
 
-            return accesskey;
-        }
+    //   string IConfigFilesDetails.IAccessToken()
+    //    {
+    //        //string accesskey;
 
-         string IConfigFilesDetails.IBaseAddress()
-        {
-            //string baseaddress;
-            //baseaddress = configuration.GetSection("ApiKeyDetails").GetSection("baseaddress").Value;
+    //        var accesskey = new ConfigurationBuilder().AddJsonFile("appsetting.json").Build().GetSection("appsetting")["accesstoken"];
 
-
-            var baseaddress = new ConfigurationBuilder().AddJsonFile("appsetting.json").Build().GetSection("appsetting")["baseaddress"];
+    //        //accesskey = configuration.GetSection("ApiKeyDetails").GetSection("accesstoken").Value;
 
 
-            return baseaddress;
-        }
+    //        return accesskey;
+    //    }
 
-         string IConfigFilesDetails.IEndPoints()
-        {
-            //string endpoints;
-            //endpoints = configuration.GetSection("ApiKeyDetails").GetSection("endpoints").Value;
-
-            var endpoints = new ConfigurationBuilder().AddJsonFile("appsetting.json").Build().GetSection("appsetting")["endpoints"];
-
-            return endpoints;
-        }
-    }
+    //     string IConfigFilesDetails.IBaseAddress()
+    //    {
+    //        //string baseaddress;
+    //        //baseaddress = configuration.GetSection("ApiKeyDetails").GetSection("baseaddress").Value;
 
 
-    class program
-    {
-        RestServiceApi rps = new RestServiceApi();
+    //        var baseaddress = new ConfigurationBuilder().AddJsonFile("appsetting.json").Build().GetSection("appsetting")["baseaddress"];
 
-        
-    }
+
+    //        return baseaddress;
+    //    }
+
+    //     string IConfigFilesDetails.IEndPoints()
+    //    {
+    //        //string endpoints;
+    //        //endpoints = configuration.GetSection("ApiKeyDetails").GetSection("endpoints").Value;
+
+    //        var endpoints = new ConfigurationBuilder().AddJsonFile("appsetting.json").Build().GetSection("appsetting")["endpoints"];
+
+    //        return endpoints;
+    //    }
+    //}
 
 }

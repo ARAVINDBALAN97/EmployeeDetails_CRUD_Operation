@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<Config>
+  <ApiBasicCredential>
+    <BaseAddress>https://gorest.co.in/</BaseAddress>
+    <accesstoken>2b3419488e21fb40f8b6bff8598bea38131531c70d9b739131adcda2b76cdcb4</accesstoken>
+    <endpoints>/public/v2/users/</endpoints>
+  </ApiBasicCredential>
+</Config>

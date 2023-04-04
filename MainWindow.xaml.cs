@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Newtonsoft.Json;
 using EmployeeDetails_CRUD_Operation.Model;
+using EmployeeDetails_CRUD_Operation.WebServiceLayer;
 using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Identity;
 using System.Net;
@@ -38,7 +39,8 @@ namespace EmployeeDetails_CRUD_Operation
     {
 
         //Api Service call
-        RestApiService rps = new RestApiService();
+        ServiceApiCall rps = new ServiceApiCall();
+        //RestApiService rps = new RestApiService();
 
         public MainWindow()
         {

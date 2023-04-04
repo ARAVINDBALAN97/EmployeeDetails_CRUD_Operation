@@ -4,42 +4,58 @@ using System.Net.Http;
 using System.Text;
 using Newtonsoft.Json;
 using EmployeeDetails_CRUD_Operation.Model;
-using EmployeeDetails_CRUD_Operation.WebServiceLayer;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using System.Configuration;
 
-namespace EmployeeDetails_CRUD_Operation
+namespace EmployeeDetails_CRUD_Operation.WebServiceLayer
 {
-
-    
-    class RestApiService
+    class ServiceApiCall
     {
-
         HttpClient Postclient = new HttpClient();
+        Common objcom = new Common();
 
-        BasicApiCall bap = new BasicApiCall();
+        
+        string strAccesstoken = string.Empty;
+        string strBaseaddress = string.Empty;
+        string strEndpoints = string.Empty;
 
-        string accesstoken = new ConfigurationBuilder().AddJsonFile("appsetting.json").Build().GetSection("appsetting")["accesstoken"];
-        string baseaddress = new ConfigurationBuilder().AddJsonFile("appsetting.json").Build().GetSection("appsetting")["baseaddress"];
-        string endpoints = new ConfigurationBuilder().AddJsonFile("appsetting.json").Build().GetSection("appsetting")["endpoints"];
+        public void InitValues()
+        {
+            try
+            {
+
+
+
+                //Postclient.BaseAddress = new Uri(strBaseAddress);
+                //Postclient.DefaultRequestHeaders.Accept.Clear();
+                //Postclient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                // String accessToken = getAuthToken(userId, password).GetAwaiter().GetResult();
+
+                //ClientDataTaskCreate(AccessToken).Wait();
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+        }
+
 
         // string accesstoken = "2b3419488e21fb40f8b6bff8598bea38131531c70d9b739131adcda2b76cdcb4";
 
         //string baseaddress = "https://gorest.co.in/";
 
-        public RestApiService()
+        public ServiceApiCall()
         {
 
-            //accesstoken = _configuration.GetSection("ApiKeyDetails").GetSection("accesstoken").Value;
-            //baseaddress = _configuration.GetSection("ApiKeyDetails").GetSection("baseaddress").Value;
-            //endpoints = _configuration.GetSection("ApiKeyDetails").GetSection("endpoints").Value;
-
-            Postclient.BaseAddress = new Uri(baseaddress);
+            SetValues();
+            Postclient.BaseAddress = new Uri(strBaseaddress);
             Postclient.DefaultRequestHeaders.Accept.Clear();
             Postclient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-            Postclient.DefaultRequestHeaders.Add("Authorization", "Bearer " + accesstoken);
+            Postclient.DefaultRequestHeaders.Add("Authorization", "Bearer " + strAccesstoken);
+
+
         }
 
         //Method to Load employees
@@ -49,7 +65,7 @@ namespace EmployeeDetails_CRUD_Operation
 
             try
             {
-                var response = await Postclient.GetStringAsync(endpoints);
+                var response = await Postclient.GetStringAsync(strEndpoints);
                 var employee = JsonConvert.DeserializeObject<List<Employee>>(response);
 
                 lstemp = employee;
@@ -72,7 +88,7 @@ namespace EmployeeDetails_CRUD_Operation
             {
                 string json = JsonConvert.SerializeObject(emp);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await Postclient.PostAsync(endpoints, content);
+                var response = await Postclient.PostAsync(strEndpoints, content);
 
                 //if (response.IsSuccessStatusCode)
                 //{
@@ -96,7 +112,7 @@ namespace EmployeeDetails_CRUD_Operation
 
                 var json = JsonConvert.SerializeObject(emp);
 
-                var response = await Postclient.PutAsJsonAsync(endpoints + emp.Id, json);
+                var response = await Postclient.PutAsJsonAsync(strEndpoints + emp.Id, json);
 
                 //if (response.IsSuccessStatusCode)
                 //{
@@ -125,7 +141,7 @@ namespace EmployeeDetails_CRUD_Operation
         {
             try
             {
-                await Postclient.DeleteAsync(endpoints + EmpID);
+                await Postclient.DeleteAsync(strEndpoints + EmpID);
 
             }
 
@@ -136,6 +152,25 @@ namespace EmployeeDetails_CRUD_Operation
 
         }
 
+
+
+        public void SetValues()
+        {
+            try
+            {
+                strBaseaddress = objcom.GetFilePath("BaseAddress").ToString();
+
+                strAccesstoken = objcom.GetFilePath("accesstoken").ToString();
+
+                strEndpoints = objcom.GetFilePath("accesstoken").ToString();
+
+            }
+
+            catch(Exception ex)
+            {
+                throw (ex);
+            }
+        }
 
     }
 }
