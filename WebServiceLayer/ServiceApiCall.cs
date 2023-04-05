@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Text;
 using Newtonsoft.Json;
 using EmployeeDetails_CRUD_Operation.Model;
+using EmployeeDetails_CRUD_Operation.WebServiceLayer;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
@@ -16,26 +17,46 @@ namespace EmployeeDetails_CRUD_Operation.WebServiceLayer
         #region Decalre Objects
         HttpClient postclient = new HttpClient();
         Common objcom = new Common();
+
+
+        ApiServiceCall apiscall = new ApiServiceCall();
         #endregion
-
-
         #region Decalre variables
+
+
+
         string strAccesstoken = string.Empty;
         string strBaseaddress = string.Empty;
         string strEndpoints = string.Empty;
         #endregion
 
+        #region Constructor
         public ServiceApiCall()
         {
-
-            SetValues();
+            InitialVal();
             postclient.BaseAddress = new Uri(strBaseaddress);
             postclient.DefaultRequestHeaders.Accept.Clear();
             postclient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
             postclient.DefaultRequestHeaders.Add("Authorization", "Bearer " + strAccesstoken);
-
-
         }
+        #endregion
+
+        public void InitialVal()
+        {
+            try
+            {
+                strBaseaddress = apiscall.IBaseAddress();
+                strAccesstoken = apiscall.IAccessToken();
+                strEndpoints = apiscall.IEndPoints();
+
+            }
+
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+        }
+
 
         #region Get all the Employees
         public async Task<List<Employee>> GetEmployeeDetails()

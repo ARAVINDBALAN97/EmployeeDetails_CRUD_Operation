@@ -41,6 +41,7 @@ namespace EmployeeDetails_CRUD_Operation
         //Api Service call
         ServiceApiCall rps = new ServiceApiCall();
 
+
         public MainWindow()
         {
 
@@ -116,7 +117,7 @@ namespace EmployeeDetails_CRUD_Operation
 
             string empdetails;
 
-            empdetails = emp.Name;
+            empdetails = emp.Id.ToString();
 
             try
             {

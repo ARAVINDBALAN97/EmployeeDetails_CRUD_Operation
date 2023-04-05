@@ -4,12 +4,11 @@ using System.Text;
 
 namespace EmployeeDetails_CRUD_Operation.WebServiceLayer
 {
-
-    interface IConfigApiDetails
+    interface IConfigApi
     {
-        public string IAccessToken();
-        public string IBaseAddress();
-        public string IEndPoints();
+        string IBaseAddress();
+        string IAccessToken();
+        string IEndPoints();
 
     }
 }
