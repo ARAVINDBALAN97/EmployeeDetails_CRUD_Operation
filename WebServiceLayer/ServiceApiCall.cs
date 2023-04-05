@@ -9,6 +9,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using System.Configuration;
+using System.Data;
 
 namespace EmployeeDetails_CRUD_Operation.WebServiceLayer
 {
@@ -17,14 +18,10 @@ namespace EmployeeDetails_CRUD_Operation.WebServiceLayer
         #region Decalre Objects
         HttpClient postclient = new HttpClient();
         Common objcom = new Common();
-
-
-        ApiServiceCall apiscall = new ApiServiceCall();
+        ApiServiceCall objApiSerCall = new ApiServiceCall();
         #endregion
+
         #region Decalre variables
-
-
-
         string strAccesstoken = string.Empty;
         string strBaseaddress = string.Empty;
         string strEndpoints = string.Empty;
@@ -33,7 +30,7 @@ namespace EmployeeDetails_CRUD_Operation.WebServiceLayer
         #region Constructor
         public ServiceApiCall()
         {
-            InitialVal();
+            InitiateValue();
             postclient.BaseAddress = new Uri(strBaseaddress);
             postclient.DefaultRequestHeaders.Accept.Clear();
             postclient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
@@ -41,13 +38,14 @@ namespace EmployeeDetails_CRUD_Operation.WebServiceLayer
         }
         #endregion
 
-        public void InitialVal()
+        #region initiate values for endpoint
+        public void InitiateValue()
         {
             try
             {
-                strBaseaddress = apiscall.IBaseAddress();
-                strAccesstoken = apiscall.IAccessToken();
-                strEndpoints = apiscall.IEndPoints();
+                strBaseaddress = objApiSerCall.IBaseAddress();
+                strAccesstoken = objApiSerCall.IAccessToken();
+                strEndpoints = objApiSerCall.IEndPoints();
 
             }
 
@@ -56,19 +54,19 @@ namespace EmployeeDetails_CRUD_Operation.WebServiceLayer
                 throw (ex);
             }
         }
-
+        #endregion
 
         #region Get all the Employees
         public async Task<List<Employee>> GetEmployeeDetails()
         {
-            List<Employee> lstemp = new List<Employee>();
+            List<Employee> lstEmp = new List<Employee>();
 
             try
             {
                 var response = await postclient.GetStringAsync(strEndpoints);
                 var employee = JsonConvert.DeserializeObject<List<Employee>>(response);
 
-                lstemp = employee;
+                lstEmp = employee;
 
             }
             catch (Exception ex)
@@ -76,7 +74,7 @@ namespace EmployeeDetails_CRUD_Operation.WebServiceLayer
                 throw (ex);
             }
 
-            return lstemp;
+            return lstEmp;
         }
         #endregion
 
@@ -88,12 +86,12 @@ namespace EmployeeDetails_CRUD_Operation.WebServiceLayer
             {
                 string json = JsonConvert.SerializeObject(emp);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await postclient.PostAsync(strEndpoints, content);
+                var response = await postclient.PostAsJsonAsync(strEndpoints, content);
 
-                //if (response.IsSuccessStatusCode)
-                //{
-                //    MessageBox.Show(response.ToString());
-                //}
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                }
             }
 
             catch (Exception ex)
@@ -151,25 +149,6 @@ namespace EmployeeDetails_CRUD_Operation.WebServiceLayer
                 throw ex;
             }
 
-        }
-        #endregion
-
-
-        #region Method to call the service values 
-        public void SetValues()
-        {
-            try
-            {
-                strBaseaddress = objcom.GetFilePath("BaseAddress").ToString();
-                strAccesstoken = objcom.GetFilePath("accesstoken").ToString();
-                strEndpoints = objcom.GetFilePath("endpoints").ToString();
-
-            }
-
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
         }
         #endregion
 

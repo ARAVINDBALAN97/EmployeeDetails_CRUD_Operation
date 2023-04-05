@@ -9,7 +9,6 @@ namespace EmployeeDetails_CRUD_Operation
 {
     class Common : IDisposable
     {
-
         public string GetFilePath(string sFilePath)
         {
             string folderPath = "";
@@ -34,8 +33,5 @@ namespace EmployeeDetails_CRUD_Operation
         {
             GC.SuppressFinalize(this);
         }
-
-
-
     }
 }

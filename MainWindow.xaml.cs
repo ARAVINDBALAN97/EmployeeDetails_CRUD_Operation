@@ -6,26 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Newtonsoft.Json;
 using EmployeeDetails_CRUD_Operation.Model;
 using EmployeeDetails_CRUD_Operation.WebServiceLayer;
-using System.Net.Http.Headers;
-using Microsoft.AspNetCore.Identity;
-using System.Net;
 using System.IO;
-using System.Data;
-using System.Reflection;
-using System.Collections;
-using Microsoft.AspNetCore.Http;
-using System.Web;
-using Microsoft.Win32;
+
 
 namespace EmployeeDetails_CRUD_Operation
 {
@@ -33,20 +18,15 @@ namespace EmployeeDetails_CRUD_Operation
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     /// 
-
-
     public partial class MainWindow : Window
     {
-
-        //Api Service call
-        ServiceApiCall rps = new ServiceApiCall();
-
+        #region Object Call
+        ServiceApiCall objSeriveCall = new ServiceApiCall();
+        #endregion
 
         public MainWindow()
         {
-
             InitializeComponent();
-
             txtEmpId.IsEnabled = false;
         }
 
@@ -57,7 +37,7 @@ namespace EmployeeDetails_CRUD_Operation
             try
             {
 
-                dgrdEmp.ItemsSource = await rps.GetEmployeeDetails();
+                dgrdEmp.ItemsSource = await objSeriveCall.GetEmployeeDetails();
 
             }
             catch (Exception ex)
@@ -79,19 +59,15 @@ namespace EmployeeDetails_CRUD_Operation
                 Email = txtmail.Text,
                 Gender = txtgender.Text,
                 Status = txtstaus.Text
-
             };
 
-            rps.SaveEmployee(emp);
-
+            objSeriveCall.SaveEmployee(emp);
 
             //txtEmpId.Text = "";
             txtName.Text = "";
             txtmail.Text = "";
             txtgender.Text = "";
             txtstaus.Text = "";
-
-
         }
 
         #endregion
@@ -115,9 +91,9 @@ namespace EmployeeDetails_CRUD_Operation
         {
             Employee emp = ((FrameworkElement)sender).DataContext as Employee;
 
-            string empdetails;
+            string empDetails;
 
-            empdetails = emp.Id.ToString();
+            empDetails = emp.Id.ToString();
 
             try
             {
@@ -128,9 +104,9 @@ namespace EmployeeDetails_CRUD_Operation
 
                 else
                 {
-                    rps.DelelteEmployee(emp.Id);
-                    MessageBox.Show("Employee with ID " + empdetails + " has been deleted.", "Response Window.");
-                    await rps.GetEmployeeDetails();
+                    objSeriveCall.DelelteEmployee(emp.Id);
+                    MessageBox.Show("Employee with ID " + empDetails + " has been deleted.", "Response Window.");
+                    await objSeriveCall.GetEmployeeDetails();
                 }
             }
 
@@ -169,7 +145,7 @@ namespace EmployeeDetails_CRUD_Operation
 
             };
 
-            rps.UpdateEmployee(emp);
+            objSeriveCall.UpdateEmployee(emp);
 
 
             txtEmpId.Text = "";
