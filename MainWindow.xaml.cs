@@ -40,7 +40,6 @@ namespace EmployeeDetails_CRUD_Operation
 
         //Api Service call
         ServiceApiCall rps = new ServiceApiCall();
-        //RestApiService rps = new RestApiService();
 
         public MainWindow()
         {

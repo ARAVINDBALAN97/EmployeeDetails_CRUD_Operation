@@ -17,7 +17,7 @@ namespace EmployeeDetails_CRUD_Operation
             {
                 XmlDocument oXML = new XmlDocument();
                 XmlNode oNode;
-                oXML.Load("Setting.xml");
+                oXML.Load("..\\..\\Setting.xml");
                 oNode = oXML.SelectSingleNode("//ApiBasicCredential/" + sFilePath);
                 if (oNode != null)
                     folderPath = oNode.InnerXml;

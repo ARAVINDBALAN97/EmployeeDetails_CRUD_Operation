@@ -13,59 +13,38 @@ namespace EmployeeDetails_CRUD_Operation.WebServiceLayer
 {
     class ServiceApiCall
     {
-        HttpClient Postclient = new HttpClient();
+        #region Decalre Objects
+        HttpClient postclient = new HttpClient();
         Common objcom = new Common();
+        #endregion
 
-        
+
+        #region Decalre variables
         string strAccesstoken = string.Empty;
         string strBaseaddress = string.Empty;
         string strEndpoints = string.Empty;
-
-        public void InitValues()
-        {
-            try
-            {
-
-
-
-                //Postclient.BaseAddress = new Uri(strBaseAddress);
-                //Postclient.DefaultRequestHeaders.Accept.Clear();
-                //Postclient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                // String accessToken = getAuthToken(userId, password).GetAwaiter().GetResult();
-
-                //ClientDataTaskCreate(AccessToken).Wait();
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
-        }
-
-
-        // string accesstoken = "2b3419488e21fb40f8b6bff8598bea38131531c70d9b739131adcda2b76cdcb4";
-
-        //string baseaddress = "https://gorest.co.in/";
+        #endregion
 
         public ServiceApiCall()
         {
 
             SetValues();
-            Postclient.BaseAddress = new Uri(strBaseaddress);
-            Postclient.DefaultRequestHeaders.Accept.Clear();
-            Postclient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-            Postclient.DefaultRequestHeaders.Add("Authorization", "Bearer " + strAccesstoken);
+            postclient.BaseAddress = new Uri(strBaseaddress);
+            postclient.DefaultRequestHeaders.Accept.Clear();
+            postclient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            postclient.DefaultRequestHeaders.Add("Authorization", "Bearer " + strAccesstoken);
 
 
         }
 
-        //Method to Load employees
+        #region Get all the Employees
         public async Task<List<Employee>> GetEmployeeDetails()
         {
             List<Employee> lstemp = new List<Employee>();
 
             try
             {
-                var response = await Postclient.GetStringAsync(strEndpoints);
+                var response = await postclient.GetStringAsync(strEndpoints);
                 var employee = JsonConvert.DeserializeObject<List<Employee>>(response);
 
                 lstemp = employee;
@@ -73,14 +52,14 @@ namespace EmployeeDetails_CRUD_Operation.WebServiceLayer
             }
             catch (Exception ex)
             {
-                //lblMessage.Content = ex.Message.ToString();
+                throw (ex);
             }
 
             return lstemp;
         }
+        #endregion
 
-
-
+        #region HttpPost post new records in End Poin
         public async void SaveEmployee(Employee emp)
         {
 
@@ -88,7 +67,7 @@ namespace EmployeeDetails_CRUD_Operation.WebServiceLayer
             {
                 string json = JsonConvert.SerializeObject(emp);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await Postclient.PostAsync(strEndpoints, content);
+                var response = await postclient.PostAsync(strEndpoints, content);
 
                 //if (response.IsSuccessStatusCode)
                 //{
@@ -98,12 +77,14 @@ namespace EmployeeDetails_CRUD_Operation.WebServiceLayer
 
             catch (Exception ex)
             {
-                //MessageBox.Show(ex.Message);
+                throw (ex);
             }
 
         }
 
+        #endregion
 
+        #region HttpPut Update the existing Details
         public async void UpdateEmployee(Employee emp)
         {
 
@@ -112,7 +93,7 @@ namespace EmployeeDetails_CRUD_Operation.WebServiceLayer
 
                 var json = JsonConvert.SerializeObject(emp);
 
-                var response = await Postclient.PutAsJsonAsync(strEndpoints + emp.Id, json);
+                var response = await postclient.PutAsJsonAsync(strEndpoints + emp.Id, json);
 
                 //if (response.IsSuccessStatusCode)
                 //{
@@ -128,20 +109,19 @@ namespace EmployeeDetails_CRUD_Operation.WebServiceLayer
             }
             catch (Exception ex)
             {
-                //MessageBox.Show(ex.ToString());
+                throw (ex);
             }
 
 
         }
+        #endregion
 
-
-
-        //Delete end point methods
+        #region HttpDelete Delete the Existing records
         public async void DelelteEmployee(int EmpID)
         {
             try
             {
-                await Postclient.DeleteAsync(strEndpoints + EmpID);
+                await postclient.DeleteAsync(strEndpoints + EmpID);
 
             }
 
@@ -151,26 +131,26 @@ namespace EmployeeDetails_CRUD_Operation.WebServiceLayer
             }
 
         }
+        #endregion
 
 
-
+        #region Method to call the service values 
         public void SetValues()
         {
             try
             {
                 strBaseaddress = objcom.GetFilePath("BaseAddress").ToString();
-
                 strAccesstoken = objcom.GetFilePath("accesstoken").ToString();
-
-                strEndpoints = objcom.GetFilePath("accesstoken").ToString();
+                strEndpoints = objcom.GetFilePath("endpoints").ToString();
 
             }
 
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw (ex);
             }
         }
+        #endregion
 
     }
 }
