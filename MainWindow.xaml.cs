@@ -10,7 +10,8 @@ using System.Windows.Input;
 using EmployeeDetails_CRUD_Operation.Model;
 using EmployeeDetails_CRUD_Operation.WebServiceLayer;
 using System.IO;
-
+using System.Text.RegularExpressions;
+using System.Collections;
 
 namespace EmployeeDetails_CRUD_Operation
 {
@@ -22,17 +23,22 @@ namespace EmployeeDetails_CRUD_Operation
     {
         #region Object Call
         ServiceApiCall objSeriveCall = new ServiceApiCall();
+        Common objCom = new Common();
+        #endregion
+
+        #region Variables declaration
+        int SearchId;
+        string empDetails;
         #endregion
 
         public MainWindow()
         {
             InitializeComponent();
-            txtEmpId.IsEnabled = false;
         }
 
 
         #region Button Load All the Employees in Grid
-        private async void btnLoadEmpDetails_Click(object sender, RoutedEventArgs e)
+        public async void btnLoadEmpDetails_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -49,8 +55,41 @@ namespace EmployeeDetails_CRUD_Operation
         #endregion
 
         #region Button Create Employee
-        private void btnCreate_Click(object sender, RoutedEventArgs e)
+        public void btnCreate_Click(object sender, RoutedEventArgs e)
         {
+            if (txtName.Text.Length == 0)
+            {
+                MessageBox.Show("Please enter the Employee Name");
+                txtName.Focus();
+            }
+
+            if (txtmail.Text.Length == 0)
+            {
+                MessageBox.Show("Please enter the valid Email");
+                txtmail.Focus();
+            }
+
+            else if (!Regex.IsMatch(txtgender.Text
+                , @"^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$"))
+            {
+                MessageBox.Show("Please enter the valid Email");
+                txtmail.Select(0, txtmail.Text.Length);
+                txtEmpId.Focus();
+            }
+
+            if (txtgender.Text.Length == 0)
+            {
+                MessageBox.Show("Please enter the Gender");
+
+                txtgender.Focus();
+            }
+            if (txtstaus.Text.Length == 0)
+            {
+                MessageBox.Show("Please enter the Status");
+                txtstaus.Focus();
+            }
+
+            // text obj call.
             var emp = new Employee()
 
             {
@@ -91,19 +130,16 @@ namespace EmployeeDetails_CRUD_Operation
         {
             Employee emp = ((FrameworkElement)sender).DataContext as Employee;
 
-            string empDetails;
-
-            empDetails = emp.Id.ToString();
-
             try
             {
-                if (emp.Id.ToString() == null)
+                if (emp.Id.ToString() == null || emp.Id.ToString() =="")
                 {
                     MessageBox.Show("Please Select Emlpoyee to delete the Request");
                 }
 
                 else
                 {
+                    empDetails = emp.Id.ToString();
                     objSeriveCall.DelelteEmployee(emp.Id);
                     MessageBox.Show("Employee with ID " + empDetails + " has been deleted.", "Response Window.");
                     await objSeriveCall.GetEmployeeDetails();
@@ -119,7 +155,7 @@ namespace EmployeeDetails_CRUD_Operation
         #endregion
 
         #region Export the employee list to csv
-        private void btnexport_Click(object sender, RoutedEventArgs e)
+        protected void btnexport_Click(object sender, RoutedEventArgs e)
         {
 
             dgrdEmp.SelectAllCells();
@@ -132,8 +168,40 @@ namespace EmployeeDetails_CRUD_Operation
         #endregion
 
         #region Buttton onclick Update
-        private void btnupdate_Click(object sender, RoutedEventArgs e)
+        protected void btnupdate_Click(object sender, RoutedEventArgs e)
         {
+            if (txtName.Text.Length == 0)
+            {
+                MessageBox.Show("Please enter the Employee Name");
+                txtName.Focus();
+            }
+
+            if (txtmail.Text.Length == 0)
+            {
+                MessageBox.Show("Please enter the valid Email");
+                txtmail.Focus();
+            }
+
+            else if (!Regex.IsMatch(txtgender.Text
+                , @"^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$"))
+            {
+                MessageBox.Show("Please enter the valid Email");
+                txtmail.Select(0, txtmail.Text.Length);
+                txtEmpId.Focus();
+            }
+
+            if (txtgender.Text.Length == 0)
+            {
+                MessageBox.Show("Please enter the Gender");
+
+                txtgender.Focus();
+            }
+            if (txtstaus.Text.Length == 0)
+            {
+                MessageBox.Show("Please enter the Status");
+                txtstaus.Focus();
+            }
+
             var emp = new Employee()
 
             {
@@ -142,7 +210,6 @@ namespace EmployeeDetails_CRUD_Operation
                 Email = txtmail.Text,
                 Gender = txtgender.Text,
                 Status = txtstaus.Text
-
             };
 
             objSeriveCall.UpdateEmployee(emp);
@@ -156,7 +223,33 @@ namespace EmployeeDetails_CRUD_Operation
         }
 
         #endregion
+
+        protected async void btnSearch_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                List<Employee> lstEmp = new List<Employee>();
+
+                if (txtEmpId.Text.ToString() == "" || txtEmpId.Text.Length == 0)
+                {
+                    MessageBox.Show("Please Enter Employee Id to search");
+                }
+                else
+                {
+                    SearchId = Convert.ToInt32(txtEmpId.Text);
+                }
+
+                dgrdEmp.ItemsSource = await objSeriveCall.GetEmployeeById(SearchId); ;
+            }
+
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+        }
     }
+
+
 
 
 

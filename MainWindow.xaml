@@ -16,7 +16,7 @@
                FontWeight="Bold" FontSize="20" Height="38" Grid.ColumnSpan="2"/>
 
         <Label x:Name="lblEmpId" Content="Employee ID" HorizontalAlignment="Left" Margin="10,58,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.444,0.455" Width="102" Background="#FF30879B" FontWeight="Bold"/>
-        <TextBox x:Name="txtEmpId" HorizontalAlignment="Left" Margin="120,61,0,0"  TextWrapping="Wrap" VerticalAlignment="Top" Width="97" RenderTransformOrigin="0.483,1.949" Height="19" Grid.ColumnSpan="2" BorderBrush="#FF03050A" IsEnabled="False"/>
+        <TextBox x:Name="txtEmpId" HorizontalAlignment="Left" Margin="120,61,0,0"  TextWrapping="Wrap" VerticalAlignment="Top" Width="97" RenderTransformOrigin="0.483,1.949" Height="19" Grid.ColumnSpan="2" BorderBrush="#FF03050A"/>
 
         <Label x:Name="lblEmpName" Content="Employee Name" HorizontalAlignment="Left" Margin="10,89,0,0" VerticalAlignment="Top" Width="103" Background="#FF30879B" FontWeight="Bold"/>
         <TextBox x:Name="txtName" HorizontalAlignment="Left" Margin="120,89,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="97" Grid.ColumnSpan="2" BorderBrush="#FF03050A"/>
@@ -55,6 +55,7 @@
         <TextBox x:Name="txtstaus" HorizontalAlignment="Left" Margin="118,0,0,0"  TextWrapping="Wrap" VerticalAlignment="Center" Width="98" Grid.ColumnSpan="2" Height="24" BorderBrush="#FF03050A"/>
         <Button x:Name="btnexport" Content="Export to CSV" Grid.Column="1" HorizontalAlignment="Left" Margin="262,65,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.488,-0.213" Width="93" Click="btnexport_Click" FontWeight="Bold" BorderBrush="#FF150202" Background="#FF2DBB8E" Height="22"/>
         <Button x:Name="btnupdate" Content="Update" HorizontalAlignment="Left" Margin="67,321,0,0" VerticalAlignment="Top" Width="95" Grid.ColumnSpan="2" Height="25" BorderBrush="#FF010C0C" Background="#FF21BFBF" FontWeight="Bold" FontSize="14" Click="btnupdate_Click"/>
+        <Button x:Name="btnSearch" Content="SerachById" HorizontalAlignment="Left" Margin="66,368,0,0" VerticalAlignment="Top" Width="94" Grid.ColumnSpan="2" Background="#FF21BFBF" FontSize="14" FontWeight="Bold" BorderBrush="#FF110A0A" Click="btnSearch_Click"/>
         <!--<Label x:Name="lblMessage" Content="Message" HorizontalAlignment="Left" Margin="79,384,0,0" VerticalAlignment="Top" RenderTransformOrigin="-9.212,0.501" Grid.ColumnSpan="2" Width="108"/>-->
 
 

@@ -25,6 +25,7 @@ namespace EmployeeDetails_CRUD_Operation.WebServiceLayer
         string strAccesstoken = string.Empty;
         string strBaseaddress = string.Empty;
         string strEndpoints = string.Empty;
+        string getDetailById = string.Empty;
         #endregion
 
         #region Constructor
@@ -77,6 +78,34 @@ namespace EmployeeDetails_CRUD_Operation.WebServiceLayer
             return lstEmp;
         }
         #endregion
+
+        #region Get one record by Id
+
+        public async Task<Employee> GetEmployeeById(int Id)
+        {
+
+            Employee emp = new Employee();
+
+            try
+            {
+                
+
+                var response = await postclient.GetStringAsync(strEndpoints);
+                var employee = JsonConvert.DeserializeObject<Employee>(response);
+
+                emp = employee;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            return emp;
+        }
+
+
+        #endregion
+
 
         #region HttpPost post new records in End Poin
         public async void SaveEmployee(Employee emp)

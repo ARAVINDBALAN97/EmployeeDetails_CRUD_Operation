@@ -33,5 +33,12 @@ namespace EmployeeDetails_CRUD_Operation
         {
             GC.SuppressFinalize(this);
         }
+
+        public string RegexEmailCheck()
+        {
+            string pattern = @"^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$";
+
+            return pattern;
+        }
     }
 }
