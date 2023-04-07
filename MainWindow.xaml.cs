@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using EmployeeDetails_CRUD_Operation.Model;
 using EmployeeDetails_CRUD_Operation.WebServiceLayer;
+using EmployeeDetails_CRUD_Operation.BusinessLogicLayer;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Collections;
@@ -23,6 +24,7 @@ namespace EmployeeDetails_CRUD_Operation
     {
         #region Object Call
         ServiceApiCall objSeriveCall = new ServiceApiCall();
+        ButtonActionMethods objBac = new ButtonActionMethods();
         Common objCom = new Common();
         #endregion
 
@@ -34,16 +36,17 @@ namespace EmployeeDetails_CRUD_Operation
         public MainWindow()
         {
             InitializeComponent();
+            btnCreate.Visibility = Visibility.Hidden;
         }
 
 
         #region Button Load All the Employees in Grid
-        public async void btnLoadEmpDetails_Click(object sender, RoutedEventArgs e)
+        protected async void btnLoadEmpDetails_Click(object sender, RoutedEventArgs e)
         {
             try
             {
 
-                dgrdEmp.ItemsSource = await objSeriveCall.GetEmployeeDetails();
+                dgrdEmp.ItemsSource = await objBac.GetAllDetails();
 
             }
             catch (Exception ex)
@@ -55,7 +58,7 @@ namespace EmployeeDetails_CRUD_Operation
         #endregion
 
         #region Button Create Employee
-        public void btnCreate_Click(object sender, RoutedEventArgs e)
+        protected void btnCreate_Click(object sender, RoutedEventArgs e)
         {
             if (txtName.Text.Length == 0)
             {
@@ -63,30 +66,30 @@ namespace EmployeeDetails_CRUD_Operation
                 txtName.Focus();
             }
 
-            if (txtmail.Text.Length == 0)
+            if (txtMail.Text.Length == 0)
             {
                 MessageBox.Show("Please enter the valid Email");
-                txtmail.Focus();
+                txtMail.Focus();
             }
 
-            else if (!Regex.IsMatch(txtgender.Text
+            else if (!Regex.IsMatch(txtGender.Text
                 , @"^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$"))
             {
                 MessageBox.Show("Please enter the valid Email");
-                txtmail.Select(0, txtmail.Text.Length);
+                txtMail.Select(0, txtMail.Text.Length);
                 txtEmpId.Focus();
             }
 
-            if (txtgender.Text.Length == 0)
+            if (txtGender.Text.Length == 0)
             {
                 MessageBox.Show("Please enter the Gender");
 
-                txtgender.Focus();
+                txtGender.Focus();
             }
-            if (txtstaus.Text.Length == 0)
+            if (txtStatus.Text.Length == 0)
             {
                 MessageBox.Show("Please enter the Status");
-                txtstaus.Focus();
+                txtStatus.Focus();
             }
 
             // text obj call.
@@ -95,44 +98,43 @@ namespace EmployeeDetails_CRUD_Operation
             {
                 //Id = Convert.ToInt32(txtEmpId.Text),
                 Name = txtName.Text,
-                Email = txtmail.Text,
-                Gender = txtgender.Text,
-                Status = txtstaus.Text
+                Email = txtMail.Text,
+                Gender = txtGender.Text,
+                Status = txtStatus.Text
             };
 
             objSeriveCall.SaveEmployee(emp);
 
             //txtEmpId.Text = "";
             txtName.Text = "";
-            txtmail.Text = "";
-            txtgender.Text = "";
-            txtstaus.Text = "";
+            txtMail.Text = "";
+            txtGender.Text = "";
+            txtStatus.Text = "";
         }
 
         #endregion
 
         #region Button Edit details
-        public void btnEdit(object sender, RoutedEventArgs e)
+        protected void btnEdit(object sender, RoutedEventArgs e)
         {
             Employee emp = ((FrameworkElement)sender).DataContext as Employee;
 
             txtEmpId.Text = emp.Id.ToString();
             txtName.Text = emp.Name;
-            txtmail.Text = emp.Email;
-            txtgender.Text = emp.Gender;
-            txtstaus.Text = emp.Status;
+            txtMail.Text = emp.Email;
+            txtGender.Text = emp.Gender;
+            txtStatus.Text = emp.Status;
         }
         #endregion
 
-
         #region Button onclick delete
-        public async void btnDeleteEmp(object sender, RoutedEventArgs e)
+        protected async void btnDeleteEmp(object sender, RoutedEventArgs e)
         {
             Employee emp = ((FrameworkElement)sender).DataContext as Employee;
 
             try
             {
-                if (emp.Id.ToString() == null || emp.Id.ToString() =="")
+                if (emp.Id.ToString() == null || emp.Id.ToString() == "")
                 {
                     MessageBox.Show("Please Select Emlpoyee to delete the Request");
                 }
@@ -141,21 +143,23 @@ namespace EmployeeDetails_CRUD_Operation
                 {
                     empDetails = emp.Id.ToString();
                     objSeriveCall.DelelteEmployee(emp.Id);
-                    MessageBox.Show("Employee with ID " + empDetails + " has been deleted.", "Response Window.");
-                    await objSeriveCall.GetEmployeeDetails();
+
                 }
+                MessageBox.Show("Employee with ID " + empDetails + " has been deleted.", "Response Window.");
+                dgrdEmp.ItemsSource = await objBac.GetAllDetails();
             }
 
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message.ToString());
             }
+
         }
 
         #endregion
 
         #region Export the employee list to csv
-        protected void btnexport_Click(object sender, RoutedEventArgs e)
+        protected void btnExport_Click(object sender, RoutedEventArgs e)
         {
 
             dgrdEmp.SelectAllCells();
@@ -168,67 +172,69 @@ namespace EmployeeDetails_CRUD_Operation
         #endregion
 
         #region Buttton onclick Update
-        protected void btnupdate_Click(object sender, RoutedEventArgs e)
+        protected void btnUpdate_Click(object sender, RoutedEventArgs e)
         {
-            if (txtName.Text.Length == 0)
+            txtEmpId.IsEnabled = false;
+
+            try
             {
-                MessageBox.Show("Please enter the Employee Name");
-                txtName.Focus();
+                if (txtName.Text.Length == 0)
+                {
+                    MessageBox.Show("Please enter the Employee Name");
+                    txtName.Focus();
+                }
+
+                if (txtMail.Text.Length == 0)
+                {
+                    MessageBox.Show("Please enter the Email");
+                    txtMail.Focus();
+                }
+
+                if (txtGender.Text.Length == 0)
+                {
+                    MessageBox.Show("Please enter the Gender");
+
+                    txtGender.Focus();
+                }
+                if (txtStatus.Text.Length == 0)
+                {
+                    MessageBox.Show("Please enter the Status");
+                    txtStatus.Focus();
+                }
+
+                var emp = new Employee()
+
+                {
+                    Id = Convert.ToInt32(txtEmpId.Text),
+                    Name = txtName.Text,
+                    Email = txtMail.Text,
+                    Gender = txtGender.Text,
+                    Status = txtStatus.Text
+                };
+
+                objBac.UpdateDetails(emp);
+
+
+                txtEmpId.Text = "";
+                txtName.Text = "";
+                txtMail.Text = "";
+                txtGender.Text = "";
+                txtStatus.Text = "";
             }
 
-            if (txtmail.Text.Length == 0)
+            catch(Exception ex)
             {
-                MessageBox.Show("Please enter the valid Email");
-                txtmail.Focus();
+                throw(ex);
             }
-
-            else if (!Regex.IsMatch(txtgender.Text
-                , @"^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$"))
-            {
-                MessageBox.Show("Please enter the valid Email");
-                txtmail.Select(0, txtmail.Text.Length);
-                txtEmpId.Focus();
-            }
-
-            if (txtgender.Text.Length == 0)
-            {
-                MessageBox.Show("Please enter the Gender");
-
-                txtgender.Focus();
-            }
-            if (txtstaus.Text.Length == 0)
-            {
-                MessageBox.Show("Please enter the Status");
-                txtstaus.Focus();
-            }
-
-            var emp = new Employee()
-
-            {
-                Id = Convert.ToInt32(txtEmpId.Text),
-                Name = txtName.Text,
-                Email = txtmail.Text,
-                Gender = txtgender.Text,
-                Status = txtstaus.Text
-            };
-
-            objSeriveCall.UpdateEmployee(emp);
-
-
-            txtEmpId.Text = "";
-            txtName.Text = "";
-            txtmail.Text = "";
-            txtgender.Text = "";
-            txtstaus.Text = "";
+            
         }
-
         #endregion
 
-        protected async void btnSearch_Click(object sender, RoutedEventArgs e)
+        #region Button Search Single Details
+        public async void btnSearch_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                List<Employee> lstEmp = new List<Employee>();
 
                 if (txtEmpId.Text.ToString() == "" || txtEmpId.Text.Length == 0)
                 {
@@ -239,7 +245,8 @@ namespace EmployeeDetails_CRUD_Operation
                     SearchId = Convert.ToInt32(txtEmpId.Text);
                 }
 
-                dgrdEmp.ItemsSource = await objSeriveCall.GetEmployeeById(SearchId); ;
+
+                dgrdEmp.ItemsSource = await objBac.GetById(SearchId);
             }
 
             catch (Exception ex)
@@ -247,11 +254,8 @@ namespace EmployeeDetails_CRUD_Operation
                 throw (ex);
             }
         }
+        #endregion
     }
-
-
-
-
 
 }
 

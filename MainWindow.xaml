@@ -6,29 +6,30 @@
         xmlns:local="clr-namespace:EmployeeDetails_CRUD_Operation"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid Height="434" VerticalAlignment="Bottom">
+    <Grid Height="434" VerticalAlignment="Bottom" Background="#FFD6E1F9">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="17*"/>
             <ColumnDefinition Width="83*"/>
         </Grid.ColumnDefinitions>
 
-        <Label x:Name="LblHeader" Content="Employee Details CRUD Operation Using REstFul Services " HorizontalAlignment="Left" Margin="120,9,0,0" VerticalAlignment="Top" Width="550"
-               FontWeight="Bold" FontSize="20" Height="38" Grid.ColumnSpan="2"/>
+        <Label x:Name="lblHeader" Content="Employee Details" HorizontalAlignment="Left" Margin="200,12,0,0" VerticalAlignment="Top" Width="172"
+               FontWeight="Bold"  FontSize="20" Height="37" Grid.Column="1" Background="#FFF7FCFF" Opacity="1.1" RenderTransformOrigin="10,10"/>
 
-        <Label x:Name="lblEmpId" Content="Employee ID" HorizontalAlignment="Left" Margin="10,58,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.444,0.455" Width="102" Background="#FF30879B" FontWeight="Bold"/>
-        <TextBox x:Name="txtEmpId" HorizontalAlignment="Left" Margin="120,61,0,0"  TextWrapping="Wrap" VerticalAlignment="Top" Width="97" RenderTransformOrigin="0.483,1.949" Height="19" Grid.ColumnSpan="2" BorderBrush="#FF03050A"/>
+        <Label x:Name="lblEmpId" Content="Employee ID" HorizontalAlignment="Left" Margin="10,58,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.444,0.455" Width="102" Background="#FF30879B" FontWeight="Bold" IsEnabled="True"/>
+        <TextBox x:Name="txtEmpId" HorizontalAlignment="Left" Margin="120,59,0,0"  TextWrapping="Wrap" VerticalAlignment="Top" Width="97" RenderTransformOrigin="0.483,1.949" Height="21" Grid.ColumnSpan="2" BorderBrush="#FF03050A"/>
 
         <Label x:Name="lblEmpName" Content="Employee Name" HorizontalAlignment="Left" Margin="10,89,0,0" VerticalAlignment="Top" Width="103" Background="#FF30879B" FontWeight="Bold"/>
-        <TextBox x:Name="txtName" HorizontalAlignment="Left" Margin="120,89,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="97" Grid.ColumnSpan="2" BorderBrush="#FF03050A"/>
+        <TextBox x:Name="txtName" HorizontalAlignment="Left" Margin="120,89,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="97" Grid.ColumnSpan="2" BorderBrush="#FF03050A" Height="23"/>
 
-        <Label x:Name="lblMail" Content="E-Mail" HorizontalAlignment="Left" Margin="11,121,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.194,-2.581" Width="101" Background="#FF30879B" FontWeight="Bold"/>
-        <TextBox x:Name="txtmail" HorizontalAlignment="Left" Margin="120,124,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="96" Grid.ColumnSpan="2" BorderBrush="#FF03050A"/>
+        <Label x:Name="lblMail" Content="E-Mail" HorizontalAlignment="Left" Margin="11,125,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.194,-2.581" Width="101" Background="#FF30879B" FontWeight="Bold" Height="24"/>
+        <TextBox x:Name="txtMail" HorizontalAlignment="Left" Margin="120,124,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="96" Grid.ColumnSpan="2" BorderBrush="#FF03050A" Height="21"/>
 
-        <Label x:Name="lblGdr" Content="Gender" HorizontalAlignment="Left" Margin="10,160,0,0" VerticalAlignment="Top" Width="101" Background="#FF30879B" FontWeight="Bold"/>
-        <TextBox x:Name="txtgender" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="120,160,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="96" BorderBrush="#FF03050A" Height="22"/>
+        <Label x:Name="lblGdr" Content="Gender" HorizontalAlignment="Left" Margin="10,161,0,0" VerticalAlignment="Top" Width="101" Background="#FF30879B" FontWeight="Bold" Height="24"/>
+        <TextBox x:Name="txtGender" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="120,160,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="96" BorderBrush="#FF03050A" Height="21"/>
 
 
-        <Label x:Name="lblSts" Content="Status" HorizontalAlignment="Left" Margin="8,0,0,0" VerticalAlignment="Center" RenderTransformOrigin="0.316,1.849" Width="102" Background="#FF30879B" FontWeight="Bold"/>
+        <Label x:Name="lblStatus" Content="Status" HorizontalAlignment="Left" Margin="8,0,0,0" VerticalAlignment="Center" RenderTransformOrigin="0.316,1.849" Width="102" Background="#FF30879B" FontWeight="Bold" />
+        <TextBox x:Name="txtStatus" HorizontalAlignment="Left" Margin="121,0,0,0"  TextWrapping="Wrap" VerticalAlignment="Center" Width="98" Grid.ColumnSpan="2" Height="24" BorderBrush="#FF03050A" RenderTransformOrigin="0.51,0.05"/>
 
         <Button x:Name="btnCreate" Content="Create" HorizontalAlignment="Left" Margin="65,270,0,0" VerticalAlignment="Top" Width="96" RenderTransformOrigin="3.36,0.115" Height="27" Grid.ColumnSpan="2" Click="btnCreate_Click" BorderBrush="#FF0F0202" Background="#FF21BFBF" FontWeight="Bold" FontSize="14"/>
         <DataGrid x:Name="dgrdEmp" Grid.Column="1" Margin="125,89,34,92" Foreground="#FF130202" FontWeight="Bold" BorderBrush="#FF1E7BD4" x:FieldModifier="public">
@@ -52,15 +53,10 @@
             </DataGrid.Columns>
         </DataGrid>
         <Button x:Name="btnLoadEmpDetails" Content="Load Employees" Grid.Column="1" HorizontalAlignment="Left" Margin="129,66,0,0" VerticalAlignment="Top" Width="109" Click="btnLoadEmpDetails_Click" BorderBrush="#FF080000" Background="#FF2DBB8E" FontWeight="Bold"/>
-        <TextBox x:Name="txtstaus" HorizontalAlignment="Left" Margin="118,0,0,0"  TextWrapping="Wrap" VerticalAlignment="Center" Width="98" Grid.ColumnSpan="2" Height="24" BorderBrush="#FF03050A"/>
-        <Button x:Name="btnexport" Content="Export to CSV" Grid.Column="1" HorizontalAlignment="Left" Margin="262,65,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.488,-0.213" Width="93" Click="btnexport_Click" FontWeight="Bold" BorderBrush="#FF150202" Background="#FF2DBB8E" Height="22"/>
-        <Button x:Name="btnupdate" Content="Update" HorizontalAlignment="Left" Margin="67,321,0,0" VerticalAlignment="Top" Width="95" Grid.ColumnSpan="2" Height="25" BorderBrush="#FF010C0C" Background="#FF21BFBF" FontWeight="Bold" FontSize="14" Click="btnupdate_Click"/>
+        <Button x:Name="btnExport" Content="Export to CSV" Grid.Column="1" HorizontalAlignment="Left" Margin="262,65,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.488,-0.213" Width="93" Click="btnExport_Click" FontWeight="Bold" BorderBrush="#FF150202" Background="#FF2DBB8E" Height="22"/>
+        <Button x:Name="btnUpdate" Content="Update" HorizontalAlignment="Left" Margin="67,321,0,0" VerticalAlignment="Top" Width="95" Grid.ColumnSpan="2" Height="25" BorderBrush="#FF010C0C" Background="#FF21BFBF" FontWeight="Bold" FontSize="14" Click="btnUpdate_Click"/>
         <Button x:Name="btnSearch" Content="SerachById" HorizontalAlignment="Left" Margin="66,368,0,0" VerticalAlignment="Top" Width="94" Grid.ColumnSpan="2" Background="#FF21BFBF" FontSize="14" FontWeight="Bold" BorderBrush="#FF110A0A" Click="btnSearch_Click"/>
         <!--<Label x:Name="lblMessage" Content="Message" HorizontalAlignment="Left" Margin="79,384,0,0" VerticalAlignment="Top" RenderTransformOrigin="-9.212,0.501" Grid.ColumnSpan="2" Width="108"/>-->
-
-
-
-
 
     </Grid>
 </Window>

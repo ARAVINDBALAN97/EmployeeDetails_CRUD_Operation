@@ -11,6 +11,5 @@ namespace EmployeeDetails_CRUD_Operation.Model
         public string Email { get; set; }
         public string Gender { get; set; }
         public string Status { get; set; }
-
     }
 }

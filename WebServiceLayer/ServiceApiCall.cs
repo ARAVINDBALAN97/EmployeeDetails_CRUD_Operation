@@ -10,6 +10,10 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using System.Configuration;
 using System.Data;
+using Newtonsoft.Json.Linq;
+using System.Net;
+using System.IO;
+using System.Windows;
 
 namespace EmployeeDetails_CRUD_Operation.WebServiceLayer
 {
@@ -17,6 +21,7 @@ namespace EmployeeDetails_CRUD_Operation.WebServiceLayer
     {
         #region Decalre Objects
         HttpClient postclient = new HttpClient();
+        Employee emp = new Employee();
         Common objcom = new Common();
         ApiServiceCall objApiSerCall = new ApiServiceCall();
         #endregion
@@ -25,7 +30,6 @@ namespace EmployeeDetails_CRUD_Operation.WebServiceLayer
         string strAccesstoken = string.Empty;
         string strBaseaddress = string.Empty;
         string strEndpoints = string.Empty;
-        string getDetailById = string.Empty;
         #endregion
 
         #region Constructor
@@ -39,7 +43,7 @@ namespace EmployeeDetails_CRUD_Operation.WebServiceLayer
         }
         #endregion
 
-        #region initiate values for endpoint
+        #region Initiate values for endpoint
         public void InitiateValue()
         {
             try
@@ -47,7 +51,6 @@ namespace EmployeeDetails_CRUD_Operation.WebServiceLayer
                 strBaseaddress = objApiSerCall.IBaseAddress();
                 strAccesstoken = objApiSerCall.IAccessToken();
                 strEndpoints = objApiSerCall.IEndPoints();
-
             }
 
             catch (Exception ex)
@@ -80,40 +83,42 @@ namespace EmployeeDetails_CRUD_Operation.WebServiceLayer
         #endregion
 
         #region Get one record by Id
-
-        public async Task<Employee> GetEmployeeById(int Id)
+        public async Task<List<Employee>> GetEmployeeById(int Id)
         {
-
+            List<Employee> lstEmp = new List<Employee>();
             Employee emp = new Employee();
-
             try
             {
-                
+                var response = await postclient.GetAsync(strEndpoints + "" + Id);
+                var result = await response.Content.ReadAsStringAsync();
 
-                var response = await postclient.GetStringAsync(strEndpoints);
-                var employee = JsonConvert.DeserializeObject<Employee>(response);
+                var results = JsonConvert.DeserializeObject<Employee>(result);
 
-                emp = employee;
+                emp.Id = results.Id;
+                emp.Name = results.Name;
+                emp.Email = results.Email;
+                emp.Gender = results.Gender;
+                emp.Status = results.Status;
+                lstEmp.Add(emp);
             }
+
             catch (Exception ex)
             {
                 throw (ex);
             }
 
-            return emp;
+            return lstEmp;
+
         }
-
-
         #endregion
 
-
-        #region HttpPost post new records in End Poin
+        #region HttpPost post new records in End Point
         public async void SaveEmployee(Employee emp)
         {
 
             try
             {
-                string json = JsonConvert.SerializeObject(emp);
+                var json = JsonConvert.SerializeObject(emp);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 var response = await postclient.PostAsJsonAsync(strEndpoints, content);
 
@@ -135,32 +140,16 @@ namespace EmployeeDetails_CRUD_Operation.WebServiceLayer
         #region HttpPut Update the existing Details
         public async void UpdateEmployee(Employee emp)
         {
-
             try
             {
-
-                var json = JsonConvert.SerializeObject(emp);
-
-                var response = await postclient.PutAsJsonAsync(strEndpoints + emp.Id, json);
-
-                //if (response.IsSuccessStatusCode)
-                //{
-                //    MessageBox.Show("Employee With Id " + emp.Name + "&" + emp.Id + " has been updated");
-                //}
-
-                //else
-                //{
-                //    //MessageBox.Show(response.ToString());
-                //}
-
-
+                var content = new StringContent(JsonConvert.SerializeObject(emp), Encoding.UTF8, "application/json");
+                await postclient.PutAsJsonAsync(strEndpoints + "" + emp.Id, content);
+                //var responsecontent = response.Content.ReadAsStringAsync().Result;
             }
             catch (Exception ex)
             {
                 throw (ex);
             }
-
-
         }
         #endregion
 

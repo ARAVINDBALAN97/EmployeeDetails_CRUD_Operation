@@ -6,50 +6,38 @@ namespace EmployeeDetails_CRUD_Operation.WebServiceLayer
 {
     public class ApiServiceCall : IConfigApi
     {
+        #region Object call
         Common objcom = new Common();
+        #endregion
 
+        #region Variable Declaration
         string strAddress = string.Empty;
         string strToken = string.Empty;
         string strEndpoint = string.Empty;
+        #endregion
 
-
-        public string BaseAddressCall()
-        {
-            strAddress = objcom.GetFilePath("BaseAddress").ToString();
-            return strAddress;
-        }
-
-        public string ApiTokenCall()
+        #region Access Token
+        public string IAccessToken()
         {
             strAddress = objcom.GetFilePath("accesstoken").ToString();
             return strAddress;
         }
+        #endregion
 
-        public string EndPointCall()
+        #region Base address
+        public string IBaseAddress()
+        {
+            strAddress = objcom.GetFilePath("BaseAddress").ToString();
+            return strAddress;
+        }
+        #endregion
+
+        #region End Point
+        public string IEndPoints()
         {
             strAddress = objcom.GetFilePath("endpoints").ToString();
             return strAddress;
         }
-
-        public string IAccessToken()
-        {
-            string aToken;
-            aToken = ApiTokenCall();
-            return aToken;
-        }
-
-        public string IBaseAddress()
-        {
-            string baseAdd;
-            baseAdd = BaseAddressCall();
-            return baseAdd;
-        }
-
-        public string IEndPoints()
-        {
-            string endPoint;
-            endPoint = EndPointCall();
-            return endPoint;
-        }
+        #endregion
     }
 }
